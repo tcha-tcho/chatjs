@@ -1,19 +1,10 @@
 ﻿/**
- * ChatJS 1.0
+ * ChatJS 1.0 - MIT License
  * www.chatjs.net
  * 
  * Copyright (c) 2013, André Pena
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms,
- * with or without modification, are permitted provided
- * that the following conditions are met:
- * 
- *     - Redistributions of source code must retain the above copyright notice,
- *       this list of conditions and the following disclaimer.
- * 
- *     - The software containing ChatJS must not directly or indirectly charge the
- *       end user at any plan. Otherwise a commercial license is required.
+ *
  **/
 
 // CHAT CONTAINER
@@ -29,6 +20,7 @@
             canClose: true,
             showTextBox: true,
             initialToggleState: "maximized",
+            onCreated: function (chatContainer) { },
             onClose: function (chatContainer) { },
             // triggers when the window changes it's state: minimized or maximized
             onToggleStateChanged: function (currentState) { }
@@ -108,9 +100,13 @@
             $._chatContainers.push(_this);
 
             $.organizeChatContainers();
+
+            _this.opts.onCreated(_this);
         },
 
         getContent: function () {
+            /// <summary>Gets the content of the chat window. This HTML element is the container for any chat window content</summary>
+            /// <returns type="Object"></returns>
             var _this = this;
             return _this.$windowInnerContent;
         },
@@ -169,7 +165,8 @@
 (function ($) {
 
     function ChatWindow(options) {
-
+        /// <summary>This is the chat window for a user.. contains the chat messages</summary>
+        /// <param name="options" type="Object"></param>
         // Defaults:
         this.defaults = {
             myUser: null,
@@ -180,7 +177,7 @@
             userIsOnline: false,
             adapter: null,
             onReady: function () { },
-            onClose: function () { },
+            onClose: function (container) { },
             // triggers when the window changes it's state: minimized or maximized
             onToggleStateChanged: function (currentState) { }
         };
@@ -191,7 +188,6 @@
         //Privates:
         this.$el = null;
         this.chatContainer = null;
-
 
         this.addMessage = function (message, clientGuid) {
             var _this = this;
@@ -572,7 +568,7 @@
                     }
                 }
             }
-            
+
             // update the online status of the remaining windows
             for (var i in _this.chatWindows) {
                 if (indexedData && indexedData[i])
@@ -639,11 +635,18 @@
             if (!mainChatWindowChatState)
                 mainChatWindowChatState = "maximized";
 
+            // will create user list chat container
             _this.chatContainer = $.chatContainer({
                 title: _this.opts.titleText,
                 showTextBox: false,
                 canClose: false,
                 initialToggleState: mainChatWindowChatState,
+                onCreated: function (container) {
+                    if (!container.$windowInnerContent.html()) {
+                        var $loadingBox = $("<div/>").addClass("loading-box").appendTo(container.$windowInnerContent);
+                        $loadingBox.activity({ segments: 8, width: 3, space: 0, length: 3, color: '#666666', speed: 1.5 });
+                    }
+                },
                 onToggleStateChanged: function (toggleState) {
                     _this.createCookie("main_window_chat_state", toggleState);
                 }

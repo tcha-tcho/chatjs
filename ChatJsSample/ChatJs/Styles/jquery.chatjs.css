@@ -80,6 +80,10 @@
     overflow-y: auto;
 }
 
+    .chat-window-inner-content .loading-box {
+        padding: 30px;
+
+    }
 
 
 input.chat-window-text-box {

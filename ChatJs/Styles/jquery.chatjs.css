@@ -1,18 +1,35 @@
-﻿.chat-window {
+﻿/**
+ * ChatJS 1.0
+ * www.chatjs.net
+ * 
+ * Copyright (c) 2013, André Pena
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms,
+ * with or without modification, are permitted provided
+ * that the following conditions are met:
+ * 
+ *     - Redistributions of source code must retain the above copyright notice,
+ *       this list of conditions and the following disclaimer.
+ * 
+ *     - The software containing ChatJS must not directly or indirectly charge the
+ *       end user at any plan. Otherwise a commercial license is required.
+ **/
+
+.chat-window {
     background-color: White;
-    border-color: #D7D7D7;
+    border-color: #A7A7A7;
     border-image: none;
     border-style: solid;
     border-width: 1px 1px 0;
     bottom: 0;
     box-shadow: 0 0 10px #D5D5D5;
-    display: none;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    line-height: 14.4px;
     position: fixed;
     width: 230px;
     z-index: 10000;
-    font-size: 12px;
-    font-family: Arial,Helvetica;
-    line-height: 14.4px;
 }
 
     .chat-window .temp-message {
@@ -33,7 +50,7 @@
     }
 
     .chat-window-title .close {
-        background-image: url("/ChatJs/Images/chat/clear.png");
+        background-image: url("/ChatJs/Images/clear.png");
         float: right;
         height: 16px;
         width: 16px;
@@ -63,6 +80,10 @@
     overflow-y: auto;
 }
 
+    .chat-window-inner-content .loading-box {
+        padding: 30px;
+
+    }
 
 
 input.chat-window-text-box {
@@ -149,6 +170,7 @@ input.chat-window-text-box {
     }
 
 .chat-window-content {
+    /*min-height: 100px;*/
 }
 
     .chat-window-content .message-warning {
@@ -173,3 +195,51 @@ input.chat-window-text-box {
         transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
         height: auto;
     }
+
+.happy {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-2.png");
+    vertical-align: top;
+}
+
+.very-happy {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-1.png");
+    vertical-align: top;
+}
+
+.sad {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-3.png");
+    vertical-align: top;
+}
+
+.wary {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-4.png");
+    vertical-align: top;
+}
+
+.astonished {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-5.png");
+    vertical-align: top;
+}
+
+.tongue {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("/ChatJs/Images/Emoticons/smile-6.png");
+    vertical-align: top;
+}

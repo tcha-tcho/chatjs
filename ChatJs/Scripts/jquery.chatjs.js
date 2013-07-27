@@ -150,8 +150,8 @@
 
     $.organizeChatContainers = function () {
         // this is the initial right offset
-        var rightOffset = 30;
-        var deltaOffset = 20;
+        var rightOffset = 10;
+        var deltaOffset = 10;
         for (var i = 0; i < $._chatContainers.length; i++) {
             $._chatContainers[i].$window.css("right", rightOffset);
             rightOffset += $._chatContainers[i].$window.outerWidth() + deltaOffset;

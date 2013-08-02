@@ -62,3 +62,9 @@ C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\System.Web.WebPages.Razor.xml
 C:\Projetos\ChatJs\Samples\ChatJsMvcSample\obj\Debug\ChatJsMvcSample.csprojResolveAssemblyReference.cache
 C:\Projetos\ChatJs\Samples\ChatJsMvcSample\obj\Debug\ChatJsMvcSample.dll
 C:\Projetos\ChatJs\Samples\ChatJsMvcSample\obj\Debug\ChatJsMvcSample.pdb
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.Core.dll
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.Owin.dll
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.Core.xml
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.Owin.xml
+C:\Projetos\ChatJs\Samples\ChatJsMvcSample\bin\Microsoft.AspNet.SignalR.SystemWeb.xml

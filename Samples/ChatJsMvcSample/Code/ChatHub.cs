@@ -62,7 +62,7 @@ namespace ChatJsMvcSample.Code
         /// <returns></returns>
         public static DbUserStub FindUserByEmail(string email)
         {
-            if (email == null) throw new ArgumentNullException("email");
+            if (email == null) return null;
             return dbUsersStub.FirstOrDefault(u => u.Email == email);
         }
 

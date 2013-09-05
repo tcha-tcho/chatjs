@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ChatJS 1.0 - MIT License
  * www.chatjs.net
  * 
@@ -444,7 +444,8 @@
             adapter: null,
             titleText: 'Chat',
             emptyRoomText: "There's no other users",
-            typingText: " is typing..."
+            typingText: " is typing...",
+            useActivityIndicatorPlugin: true
         };
 
         //Extending options:
@@ -644,7 +645,9 @@
                 onCreated: function (container) {
                     if (!container.$windowInnerContent.html()) {
                         var $loadingBox = $("<div/>").addClass("loading-box").appendTo(container.$windowInnerContent);
-                        $loadingBox.activity({ segments: 8, width: 3, space: 0, length: 3, color: '#666666', speed: 1.5 });
+                        if (_this.opts.useActivityIndicatorPlugin) {
+                            $loadingBox.activity({ segments: 8, width: 3, space: 0, length: 3, color: '#666666', speed: 1.5 });
+                        }
                     }
                 },
                 onToggleStateChanged: function (toggleState) {

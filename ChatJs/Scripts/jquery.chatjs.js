@@ -445,7 +445,8 @@
             titleText: 'Chat',
             emptyRoomText: "There's no other users",
             typingText: " is typing...",
-            useActivityIndicatorPlugin: true
+            useActivityIndicatorPlugin: true,
+            playSound: true
         };
 
         //Extending options:
@@ -669,7 +670,9 @@
                     else
                         _this.chatWindows[message.UserFrom.Id].addMessage(message);
 
-                    _this.playSound("/chatjs/sounds/chat");
+                    if (_this.opts.playSound) {
+                        _this.playSound("/chatjs/sounds/chat");
+                    }
 
                     // play sound here
                 } else {

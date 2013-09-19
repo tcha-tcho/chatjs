@@ -1,13 +1,5 @@
 // Activate debug to see some useful logs.
 
-
-
-
-
-
-
-
-
 /*
  * This adapter is not finished yet, please dont use it under a production environment
  * To use this adapter you should include http://code.xrtml.org/xrtml-3.0.0.js
@@ -17,26 +9,31 @@
 
 $(document).ready(function(){
             
-
-        var user = {
-            Id: "web",
-            Name: 'Web',
-            ProfilePictureUrl: 'http://static.wixet.com/images/avatar.png'
-        };
-                
-        
-        $.chat({
-            // your user information
-            user: user,
-            // text displayed when the other user is typing
-            typingText: ' is typing...',
-            // the title for the user's list window
-            titleText: 'XMPP chat',
-            // text displayed when there's no other users in the room
-            emptyRoomText: "What loneliest place",
-            // the adapter you are using
-            adapter: new XRTMLAdapter(user.Id, "xmpp.wixet.com", "Web", YourAppKey, YourauthToken)
-        });
+    var user = {
+      Id: "web",
+      Name: 'Web',
+      ProfilePictureUrl: 'http://static.wixet.com/images/avatar.png'
+    };
+    
+    $.chat({
+      // your user information
+      user: user,
+      // text displayed when the other user is typing
+      typingText: ' is typing...',
+      // the title for the user's list window
+      titleText: 'XRTML chat',
+      // text displayed when there's no other users in the room
+      emptyRoomText: "What loneliest place",
+      // the adapter you are using
+      adapter: new XRTMLAdapter({
+         user:"testing"
+        ,host:"http://ortc-developers.realtime.co/server/2.1"
+        ,resource:"Chat"
+        ,appKey:"yourAppKey"
+        ,authToken:"yourAuthToken"
+        ,debug:true
+      })
+    });
 });
 */
  
@@ -44,7 +41,7 @@ function XRTMLAdapter(opts) {
     //opts = {user, host, resource, appKey, authToken}
 
     /// <summary>
-    /// Adapter XMPP para ChatJs. In order to use this adapter.. Pass an instance of this 
+    /// Adapter XRTML para ChatJs. In order to use this adapter.. Pass an instance of this 
     /// function to $.chat()
     /// </summary>
     if (!opts) opts = {};
@@ -103,7 +100,7 @@ XRTMLAdapter.prototype = {
                   messages[id[0]] = []
                messages[id[0]].push(msg)
                chat.client.sendMessage(msg);
-               
+
               // Received message: 'message' - at channel: 'channel');
               ortcClient.unsubscribe(channel);
             });
@@ -155,7 +152,7 @@ XRTMLAdapter.prototype = {
     var _this = this;
 
         /*
-         * TODO: implement this event in the xmpp library
+         * TODO: implement this event in the XRTML library
             _this.hub.client.sendTypingSignal = function (otherUser) {
                 chat.client.sendTypingSignal(otherUser);
             };

@@ -3,6 +3,7 @@
   <title>innerframe testing</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="../qunit-git.css">
+  <link rel="stylesheet" href="../../Chatjs/Styles/jquery.chatjs.css">
 </head>
 <body>
   <div id="qunit"></div>
@@ -10,26 +11,55 @@
 
   <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 
-  <script type="text/javascript" src="http://code.xrtml.org/xrtml-3.0.0.js"></script>
+  <script type="text/javascript" src="http://dfdbz2tdq3k01.cloudfront.net/js/2.1.0/ortc.js"></script>
 
   <script src="../../Chatjs/Scripts/jquery.activity-indicator-1.0.0.min.js"></script>
   <script src="../../Chatjs/Scripts/jquery.autosize.min.js"></script>
-  <script src="../../Chatjs/Scripts/jquery.chatjs.xrtml.js"></script>
+  <script src="../../Chatjs/Scripts/jquery.chatjs.xrtmladapter.js"></script>
   <script src="../../Chatjs/Scripts/jquery.chatjs.js"></script>
 
   <script type="text/javascript">
-  
-    test( "Is present", function() {
-      ok( typeof $.fn.innerframe != "undefined", "Global is here!" );
-      ok( typeof $("#div1").innerframe != "undefined", "Global is applied to elements!" );
+    jQuery(document).ready(function(){
+
+      var user = {
+        Id: "web",
+        Name: 'Web',
+        ProfilePictureUrl: 'http://static.wixet.com/images/avatar.png'
+      };
+
+
+      jQuery.chat({
+          // your user information
+          user: user,
+          // text displayed when the other user is typing
+          typingText: ' is typing...',
+          // the title for the user's list window
+          titleText: 'XMPP chat',
+          // text displayed when there's no other users in the room
+          emptyRoomText: "What loneliest place",
+          // the adapter you are using
+          adapter: new XRTMLAdapter({
+             user:"testing"
+            ,host:"http://ortc-developers.realtime.co/server/2.1"
+            ,resource:"Chat"
+            ,appKey:"Oe02ud"
+            ,authToken:"3392c192a09842fbbc9f4654beef1a93"
+            ,debug:true
+          })
+        });
     });
 
-    test( "iFrames receives the write options", function() {
-      expect(3);
-      equal( $("iframe","#div1").width(), 300 ,"Div1 has the right width" );
-      equal( $("iframe","#div1").height(), 250 ,"Div1 has the right height" );
-      ok( /rgb(255, 255, 224)||#FFFFFF/.test($("iframe","#div2").css("background-color")), "Div2 has the right background" );
-    });
+    // test( "Is present", function() {
+    //   ok( typeof $.fn.innerframe != "undefined", "Global is here!" );
+    //   ok( typeof $("#div1").innerframe != "undefined", "Global is applied to elements!" );
+    // });
+
+    // test( "iFrames receives the write options", function() {
+    //   expect(3);
+    //   equal( $("iframe","#div1").width(), 300 ,"Div1 has the right width" );
+    //   equal( $("iframe","#div1").height(), 250 ,"Div1 has the right height" );
+    //   ok( /rgb(255, 255, 224)||#FFFFFF/.test($("iframe","#div2").css("background-color")), "Div2 has the right background" );
+    // });
 
   </script>
   <br>

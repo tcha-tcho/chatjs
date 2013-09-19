@@ -1,38 +1,4 @@
 // Activate debug to see some useful logs.
-xRTML.Config.debug = true;
-
-xRTML.load(function () {
-    // At this point, since xRTML is ready, we need to create a connection in order to send messages.
-    // To do that we use method "create" of the ConnectionManager module.
-    // For more information about the criation of connections and channels visit http://docs.xrtml.org/3-0-0/javascript/xrtml.connectionmanager.htm
-    xRTML.ConnectionManager.create({
-        // The id of the connection we are about to create.
-        id: "myConnection",
-        // URL of the ORTC server.
-        url: 'http://ortc-developers.realtime.co/server/2.1',
-        // The application key you receive when you registered in our site.
-        appKey: 'Oe02ud',
-        // An authentication token.
-        authToken: '3392c192a09842fbbc9f4654beef1a93',
-        // The array of channels you want to subscribe.        
-        // If we do not subscribe any channel, by opening the console we can see that the messages are only sent.        
-        channels: [{name: 'myChannel'}]
-    });
-    
-    // Then we create a Shoutbox tag.    
-    // For more information about the Shoutbox tag visit http://docs.xrtml.org/3-0-0/javascript/xrtml.tags.shoutbox.htm
-    xRTML.TagManager.create({
-        name: 'Shoutbox',
-        // id: "myShoutBox",
-        // The connections and the channel to send the messages.
-        connections: ['myConnection'],                                
-        channelId: "myChannel",
-        // The trigger of the Shoutbox.
-        triggers: ['myTrigger'],
-        // The target where the Shoutbox elements will be rendered.
-        target: "#myShoutboxContainer"
-    });
-});
 
 
 
@@ -69,100 +35,146 @@ $(document).ready(function(){
             // text displayed when there's no other users in the room
             emptyRoomText: "What loneliest place",
             // the adapter you are using
-            adapter: new XMPPAdapter(user.Id, "xmpp.wixet.com", "Web", 123456)
+            adapter: new XRTMLAdapter(user.Id, "xmpp.wixet.com", "Web", YourAppKey, YourauthToken)
         });
 });
 */
  
-function XMPPAdapter(user, host, resource, password) {
+function XRTMLAdapter(opts) {
+    //opts = {user, host, resource, appKey, authToken}
+
     /// <summary>
     /// Adapter XMPP para ChatJs. In order to use this adapter.. Pass an instance of this 
     /// function to $.chat()
     /// </summary>
-    this.userId = user;
-    this.host = host;
-    this.resource = resource;
-    this.password = password;
+    if (!opts) opts = {};
+
+    this.userId     = (opts.user || 0);
+    this.host       = (opts.host || "http://ortc-developers.realtime.co/server/2.1");
+    this.resource   = (opts.resource || "Chat");
+    this.appKey     = (opts.appKey || "");
+    this.authToken  = (opts.authToken || "");
+    this.metadata   = (opts.metadata || "clientConnMeta");
+    this.debug      = (opts.debug || false);
 }
 
-XMPPAdapter.prototype = {
-    userId: 0,
-    resource: "Chat",
-    host: "",
-    password: "",
-    init: function (chat) {
-/* Local messages for  history */
- var messages = [];
- var url ="/http-bind";
- 
- /* Single string for jid may be used in the future */
- $.xmpp.connect({url:url, jid: this.userId+"@"+this.host, password: this.password,
-                    onConnect: function(){
-                        $.xmpp.setPresence(null);
-                        chat.onReady();
-                        console.log("Connected")
-                    },
-                    onPresence: function(presence){
-                        
-                        /*
-                         * TODO: Call chat.client.usersListChanged(usersList);
-                         */
-                    
-                    },
-                    onDisconnect: function(){
-                        /*
-                         * TODO: Do stuff when disconnect
-                         */
-                        alert("Disconnected");
-                    },
-                    onMessage: function(message){
-                          var id = message.from.split("@");
-                          var msg = {
-                                UserFrom:{
-                                    Id: id[0],
-                                    Name: id[0],
-                                    // TODO: Profile picture is provided when user vcard is received
-                                    ProfilePictureUrl: "http://static.wixet.com/images/user.png",
-                                },
-                                Message: message.body
-                        }
-                        
-                        /* An array for every chat */
-                        if(messages[id[0]] == null)
-                            messages[id[0]] = []
-                        messages[id[0]].push(msg)
-                        chat.client.sendMessage(msg);
-                        
-                    },onError:function(error){
-                        /*
-                         * TODO: Do stuff when error
-                         */
-                        alert(error.error);
-                    }
-                }); 
-        var _this = this;
-   
-/*
- * TODO: implement this event in the xmpp library
-        _this.hub.client.sendTypingSignal = function (otherUser) {
-            chat.client.sendTypingSignal(otherUser);
-        };
+XRTMLAdapter.prototype = {
+  init: function (chat) {
 
-     
-*/
-/*
- For testing reasons, removed in the future
+    /* Local messages for  history */
+    var messages = [];
+
+    /* Single string for jid may be used in the future */
+
+
+    loadOrtcFactory(IbtRealTimeSJType, function (factory, error) {
+      if (error != null) {
+          alert("Factory error: " + error.message);
+      } else {
+        if (factory != null) {
+          // Create ORTC client
+          var ortcClient = factory.createClient();
+
+          // Set ORTC client properties
+          ortcClient.setId(this.userId);
+          ortcClient.setConnectionMetadata(this.metadata);
+          ortcClient.setClusterUrl(this.host);
+
+          ortcClient.onConnected = function (ortc) {
+            // Connected
+            chat.onReady();
+            console.log("Connected")
+
+            ortcClient.subscribe('channel1', true, function (ortc, channel, message) {
+              console.log(message)
+              var id = message.from.split("@");
+              var msg = {
+                  UserFrom: {
+                      Id: id[0],
+                      Name: id[0],
+                      // TODO: Profile picture is provided when user vcard is received
+                      ProfilePictureUrl: "http://static.wixet.com/images/user.png",
+                  },
+                  Message: message.body
+              }
+
+              /* An array for every chat */
+              if (messages[id[0]] == null)
+                  messages[id[0]] = []
+               messages[id[0]].push(msg)
+               chat.client.sendMessage(msg);
+               
+              // Received message: 'message' - at channel: 'channel');
+              ortcClient.unsubscribe(channel);
+            });
+
+
+          };
+
+          ortcClient.presence = function (ortc) {
+            /*
+             * TODO: Call chat.client.usersListChanged(usersList);
+             */
+          };
+
+          ortcClient.onDisconnected = function (ortc) {
+            // Disconnected
+            /*
+             * TODO: Do stuff when disconnect
+             */
+          };
+
+
+
+          ortcClient.onSubscribed = function (ortc, channel) {
+            // Subscribed to the channel 'channel');
+            ortcClient.send(channel, 'Message to the channel');
+          };
+
+          ortcClient.onUnsubscribed = function (ortc, channel) {
+            // Unsubscribed from the channel 'channel');
+            ortcClient.disconnect();
+          };
+
+          ortcClient.onException = function (ortc, exception) {
+            // Exception occurred: 'exception'
+          };
+
+          ortcClient.onReconnecting = function (ortc) {
+            // Trying to reconnect
+          };
+
+          ortcClient.onReconnected = function (ortc) {
+            // Reconnected
+          };
+
+          ortcClient.connect('Oe02ud', '3392c192a09842fbbc9f4654beef1a93');
+        }
+      }
+    });
+    var _this = this;
+
+        /*
+         * TODO: implement this event in the xmpp library
+            _this.hub.client.sendTypingSignal = function (otherUser) {
+                chat.client.sendTypingSignal(otherUser);
+            };
+
+   
+        */
+        /*
+         For testing reasons, removed in the future
          setTimeout(function(){
             var usersList = [
-                {
-                    Id: "prueba",
-                    Status: 1,
-                    Name: "prueba"
-                }
+              {
+                Id: "prueba",
+                Status: 1,
+                Name: "prueba"
+              }
             ]
             chat.client.usersListChanged(usersList);
-        },1000);
-*/
+          },1000);
+        */
 
         
         // These are the methods that ARE CALLED BY THE CLIENT
@@ -175,6 +187,8 @@ XMPPAdapter.prototype = {
             /// <param name="messageText" type="String">Message text</param>
             /// <param name="clientGuid" type="String">Message client guid. Each message must have a client id in order for it to be recognized when it comes back from the server</param>
             /// <param name="done" type="Function">Function to be called when this method completes</param>
+
+            console.log("send message...")
             
             // Save message in local history
             if(messages[otherUserId] == null)
@@ -189,17 +203,17 @@ XMPPAdapter.prototype = {
             })
             
             
-            // Send message to the server
-            $.xmpp.sendMessage({body: messageText, to: otherUserId+"@"+_this.host, resource:_this.resource}, function(data){
-                chat.client.sendMessage({
-                UserFrom:{
-                    Id: otherUserId,
-                    Name: otherUserId,
-                },
-                Message: messageText,
-                ClientGuid: clientGuid
-            });
-            });
+            // // Send message to the server
+            // $.xmpp.sendMessage({body: messageText, to: otherUserId+"@"+_this.host, resource:_this.resource}, function(data){
+            //     chat.client.sendMessage({
+            //     UserFrom:{
+            //         Id: otherUserId,
+            //         Name: otherUserId,
+            //     },
+            //     Message: messageText,
+            //     ClientGuid: clientGuid
+            //   });
+            // });
             
         };
 

@@ -199,7 +199,7 @@ XRTMLAdapter.prototype = {
             })
             
             ortcClient.send(channel, {body: messageText, to: otherUserId+"@"+_this.host, resource:_this.resource});
-            
+
             chat.client.sendMessage({
               UserFrom:{
                   Id: otherUserId,

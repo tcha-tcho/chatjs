@@ -21,6 +21,8 @@
   <script type="text/javascript">
     jQuery(document).ready(function(){
 
+      var test_user_name = ( window.location.hash.replace("#","") || "testing");
+      console.log("connecting: "+test_user_name);
       var user = {
         Id: "web",
         Name: 'Web',
@@ -39,7 +41,7 @@
           emptyRoomText: "What loneliest place",
           // the adapter you are using
           adapter: new XRTMLAdapter({
-             user:"testing"
+             user: test_user_name
             ,host:"http://ortc-developers.realtime.co/server/2.1"
             ,resource:"Chat"
             ,appKey:"Oe02ud"

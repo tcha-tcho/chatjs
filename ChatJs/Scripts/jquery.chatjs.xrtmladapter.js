@@ -57,6 +57,7 @@ function XRTMLAdapter(opts) {
 
 XRTMLAdapter.prototype = {
   init: function (chat) {
+    var _this = this;
 
     /* Local messages for  history */
     var messages = [];
@@ -73,14 +74,14 @@ XRTMLAdapter.prototype = {
           var ortcClient = factory.createClient();
 
           // Set ORTC client properties
-          ortcClient.setId(this.userId);
-          ortcClient.setConnectionMetadata(this.metadata);
-          ortcClient.setClusterUrl(this.host);
+          ortcClient.setId(_this.userId);
+          ortcClient.setConnectionMetadata(_this.metadata);
+          ortcClient.setClusterUrl(_this.host);
 
           ortcClient.onConnected = function (ortc) {
             // Connected
-            chat.onReady();
             console.log("Connected")
+            chat.onReady();
 
             ortcClient.subscribe('channel1', true, function (ortc, channel, message) {
               console.log(message)
@@ -145,11 +146,10 @@ XRTMLAdapter.prototype = {
             // Reconnected
           };
 
-          ortcClient.connect('Oe02ud', '3392c192a09842fbbc9f4654beef1a93');
+          ortcClient.connect(_this.appKey, _this.authToken);
         }
       }
     });
-    var _this = this;
 
         /*
          * TODO: implement this event in the XRTML library

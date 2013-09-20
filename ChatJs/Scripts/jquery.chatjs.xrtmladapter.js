@@ -126,7 +126,6 @@ XRTMLAdapter.prototype = {
 
           ortcClient.onSubscribed = function (ortc, channel) {
             // Subscribed to the channel 'channel');
-            ortcClient.send(channel, 'Message to the channel');
           };
 
           ortcClient.onUnsubscribed = function (ortc, channel) {
@@ -199,17 +198,20 @@ XRTMLAdapter.prototype = {
                 Message: messageText
             })
             
+            ortcClient.send(channel, {body: messageText, to: otherUserId+"@"+_this.host, resource:_this.resource});
+            
+            chat.client.sendMessage({
+              UserFrom:{
+                  Id: otherUserId,
+                  Name: otherUserId,
+              },
+              Message: messageText,
+              ClientGuid: clientGuid
+            });
+
             
             // // Send message to the server
             // $.xmpp.sendMessage({body: messageText, to: otherUserId+"@"+_this.host, resource:_this.resource}, function(data){
-            //     chat.client.sendMessage({
-            //     UserFrom:{
-            //         Id: otherUserId,
-            //         Name: otherUserId,
-            //     },
-            //     Message: messageText,
-            //     ClientGuid: clientGuid
-            //   });
             // });
             
         };
